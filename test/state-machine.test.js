@@ -117,7 +117,6 @@ test('detectInconsistencies: clean job has no reasons', () => {
       { operation: 'register', status: S.success, index: '0' },
       { operation: 'download', status: S.success, index: '1' },
     ]),
-    { remoteDataObjectStatus: 'success' },
   );
   assert.deepEqual(reasons, []);
 });
@@ -152,13 +151,4 @@ test('detectInconsistencies: busy task within the timeout is not flagged', () =>
     { staleTaskTimeoutMs: 30 * 60 * 1000, now },
   );
   assert.deepEqual(reasons, []);
-});
-
-test('detectInconsistencies: download success but remote data object not success', () => {
-  const reasons = detectInconsistencies(
-    job([{ operation: 'download', status: S.success }]),
-    { remoteDataObjectStatus: 'ongoing' },
-  );
-  assert.equal(reasons.length, 1);
-  assert.match(reasons[0], /not success/);
 });

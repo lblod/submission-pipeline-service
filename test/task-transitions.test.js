@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   buildStatusTransitionQuery,
   runStatusTransitions,
+  buildFailureTransitions,
 } from '../lib/task-transitions.js';
 
 const GRAPH =
@@ -77,4 +78,38 @@ test('runStatusTransitions: joins independent transitions with a single ; separa
   );
   assert.equal(combined.split('\n;\n').length, 2);
   assert.equal(typeof runStatusTransitions, 'function');
+});
+
+test('buildFailureTransitions: fails task and job, both linked to the error', () => {
+  const ERROR = 'http://data.lblod.info/errors/error-1';
+  const transitions = buildFailureTransitions({
+    graph: GRAPH,
+    taskUri: TASK,
+    jobUri: JOB,
+    errorUri: ERROR,
+  });
+  assert.deepEqual(
+    transitions.map((t) => [t.subject, t.newStatus]),
+    [
+      [TASK, FAILED],
+      [JOB, FAILED],
+    ],
+  );
+  for (const t of transitions) {
+    assert.equal(t.graph, GRAPH);
+    assert.equal(t.extraInsert, `<${t.subject}> task:error <${ERROR}> .`);
+  }
+});
+
+test('buildFailureTransitions: still fails both without an error to link', () => {
+  const transitions = buildFailureTransitions({
+    graph: GRAPH,
+    taskUri: TASK,
+    jobUri: JOB,
+  });
+  assert.equal(transitions.length, 2);
+  for (const t of transitions) {
+    assert.equal(t.newStatus, FAILED);
+    assert.equal(t.extraInsert, '');
+  }
 });
