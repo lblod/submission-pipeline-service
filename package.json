@@ -1,0 +1,45 @@
+{
+  "name": "submission-pipeline-service",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Registers, downloads and imports automatic submissions for the Loket submission flow.",
+  "main": "app.js",
+  "scripts": {
+    "test": "bash scripts/docker-test.sh",
+    "lint:js": "eslint . --cache",
+    "lint:js:fix": "eslint . --cache --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lblod/submission-pipeline-service.git"
+  },
+  "author": "redpencil.io",
+  "license": "MIT",
+  "dependencies": {
+    "@lblod/marawa": "^0.7.1",
+    "@lblod/mu-auth-sudo": "^0.6.2",
+    "argon2": "^0.44.0",
+    "body-parser": "^1.19.0",
+    "content-disposition": "^1.0.1",
+    "env-var": "^7.3.0",
+    "express-rate-limit": "^6.6.0",
+    "file-type": "^16.5.3",
+    "fs-extra": "^8.1.0",
+    "htmlparser2": "^7.2.0",
+    "istextorbinary": "^6.0.0",
+    "jsdom": "^11.6.2",
+    "jsonld": "^8.1.0",
+    "lodash": "^4.17.11",
+    "mime-types": "^2.1.24",
+    "n3": "^1.16.2",
+    "simple-oauth2": "^5.1.0",
+    "sparqljson-parse": "^2.1.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.23.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0"
+  }
+}
