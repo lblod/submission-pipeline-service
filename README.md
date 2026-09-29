@@ -242,7 +242,7 @@ resumed, so an old backlog is not processed unnoticed after an incident.
 | `REGISTERING` | Fail the job: the request body is gone and the vendor must resubmit.                   |
 | `SCHEDULED`   | Start the download, then the import.                                                   |
 | `DOWNLOADING` | Resume the existing `ndo:DownloadEvent` at its current retry count, then import.       |
-| `DOWNLOADED`  | Run the import.                                                                        |
+| `DOWNLOADED`  | Run the import, first creating the import task if job-controller-service never did.    |
 | `IMPORTING`   | Remove the partially written Turtle file and its triples, then run the import again. Attachments created by the interrupted run are reused. |
 | other         | Nothing.                                                                               |
 

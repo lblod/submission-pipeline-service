@@ -101,6 +101,14 @@ test('buildFailureTransitions: fails task and job, both linked to the error', ()
   }
 });
 
+test('buildFailureTransitions: without a task only fails the job', () => {
+  const transitions = buildFailureTransitions({ graph: GRAPH, jobUri: JOB });
+  assert.deepEqual(
+    transitions.map((t) => t.subject),
+    [JOB],
+  );
+});
+
 test('buildFailureTransitions: still fails both without an error to link', () => {
   const transitions = buildFailureTransitions({
     graph: GRAPH,
