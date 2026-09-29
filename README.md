@@ -47,7 +47,9 @@ through its existing delta rules.
 1. **Check the job-controller configuration.** This service creates the `register`,
    `download` and `import` tasks itself. `job-controller-service` must not create any of
    those, and must start the task that follows `tasko:import`. A mistake here shows up
-   as duplicate tasks, not as an error.
+   as duplicate tasks, not as an error. Also check that no other job type uses
+   `tasko:import`: `import-submission-service` ran every import task, this service only
+   runs its own.
 2. **Merge the environment variables.** Collect the variables of
    `automatic-submission`, `download-url` and `import-submission` from
    `docker-compose.yml` and any override files into the one `submission-pipeline`
