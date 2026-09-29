@@ -257,8 +257,10 @@ stated otherwise. Prefixes are defined in [`lib/constants.js`](lib/constants.js)
   file-download-statuses:ready-to-be-cached`. If the request contained credentials, a copy is
   linked with `dgftSec:targetAuthenticationConfiguration`.
 * **Download task**: `task:operation tasko:download`, `task:cogsOperation
-  cogs:WebServiceLookup`, `task:index "1"`, `adms:status js:scheduled`, with the same
-  harvesting collection as `task:inputContainer`.
+  cogs:WebServiceLookup`, `task:index "1"`, `adms:status js:scheduled`, `cogs:dependsOn`
+  the register task, with the same harvesting collection as `task:inputContainer`.
+  job-controller-service only marks a job successful once every non-final task has a
+  task that depends on it.
 
 #### Download
 
@@ -275,8 +277,8 @@ stated otherwise. Prefixes are defined in [`lib/constants.js`](lib/constants.js)
   `task:hasFile` the remote data object. On failure the task and job become `js:failed`
   with a `task:error`.
 * **Import task**: created on success, with `task:operation tasko:import`, `task:index
-  "2"`, `adms:status js:scheduled` and an input container that `task:hasFile` the remote
-  data object.
+  "2"`, `adms:status js:scheduled`, `cogs:dependsOn` the download task, and an input
+  container that `task:hasFile` the remote data object.
 
 #### Import
 
