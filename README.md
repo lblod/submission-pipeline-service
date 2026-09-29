@@ -85,8 +85,6 @@ Removed without replacement:
 
 * `POST /download-status-update` and `POST /delta`: the steps call each other directly.
 * `AUTOMATIC_SUBMISSION_JSON_LD_CONTEXT_ENDPOINT`: it was never read.
-* `PING_DB_INTERVAL`: the service does not wait for the database at startup (see
-  [Known limitations](#known-limitations)).
 
 ## How-to guides
 
@@ -136,6 +134,7 @@ required.
 | `REMOVE_AUTHENTICATION_SECRETS_AFTER_DOWNLOAD` | Delete a download's cloned credentials once it succeeds or fails. The misspelled `REMOVE_AUTHENTICATION_SECRETS_AFTER_DOWLOAD` is still accepted but deprecated. | `true`                                                                                |
 | `VANDENBROELE_URI`                            | Vendor URI used to recognise Vandenbroele submissions.                                                                                                           | `http://data.lblod.info/vendors/b1e41693-639a-4f61-92a9-5b9a3e0b924e`                 |
 | `APPLY_VANDENBROELE_FILENAME_WORKAROUND`      | Guess attachment filenames from the submission HTML for that vendor.                                                                                             | `false`                                                                               |
+| `PING_DB_INTERVAL`                            | Seconds between checks while waiting for the database at startup, before reconciliation runs.                                                                    | `2`                                                                                   |
 | `DOWNLOAD_CONCURRENCY`                        | *New.* Maximum number of download attempts and imports running at once, attachments included. Waiting for a retry doesn't count.                                 | `5`                                                                                   |
 | `RECONCILE_ON_BOOT`                           | *New.* Run [reconciliation](#reconciliation) at startup.                                                                                                         | `true`                                                                                |
 | `RECONCILE_INTERVAL`                          | *New.* Seconds between periodic reconciliation runs. `0` disables them.                                                                                          | `3600`                                                                                |
@@ -343,6 +342,3 @@ Most of these are inherited from the old services:
 * RDFa is extracted with [marawa](https://github.com/lblod/marawa), which drops language
   tags. Replacing it (for example with rdflib.js) changes the harvested triples and needs
   its own migration.
-* The service does not wait for the triplestore at startup. If it isn't ready, the
-  startup reconciliation fails and only periodic runs, which skip recently active jobs,
-  remain.

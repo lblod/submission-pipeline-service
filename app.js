@@ -13,7 +13,9 @@ app.use(bodyParser.json());
 app.post('/melding', meldingHandler);
 app.post('/status', statusLimiter, statusHandler);
 
-startReconciliation();
+startReconciliation().catch((error) => {
+  console.error(`Could not start reconciliation: ${error.message}`);
+});
 
 // Routes handle their own errors; this catches the rest (e.g. malformed JSON).
 // Must be registered last to be reachable.
