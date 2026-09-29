@@ -44,12 +44,24 @@ through its existing delta rules.
 
 ### From automatic-submission-service, download-url-service and import-submission-service
 
-1. **Check the job-controller configuration.** This service creates the `register`,
-   `download` and `import` tasks itself. `job-controller-service` must not create any of
-   those, and must start the task that follows `tasko:import`. A mistake here shows up
-   as duplicate tasks, not as an error. Also check that no other job type uses
-   `tasko:import`: `import-submission-service` ran every import task, this service only
-   runs its own.
+1. **Update the job-controller configuration.** This service creates the `register`,
+   `download` and `import` tasks itself. In the `automaticSubmissionFlow` configuration,
+   mark the `download` entry (whose next operation is `import`) as external, like the
+   `register` entry already is. Keep the entries themselves: job-controller needs the
+   whole chain to decide when a job is complete.
+
+   ```json
+   {
+     "currentOperation": "http://lblod.data.gift/id/jobs/concept/TaskOperation/download",
+     "nextOperation": "http://lblod.data.gift/id/jobs/concept/TaskOperation/import",
+     "nextIndex": "2",
+     "external": true
+   }
+   ```
+
+   A mistake here shows up as duplicate import tasks, not as an error. Also check that
+   no other job type uses `tasko:import`: `import-submission-service` ran every import
+   task, this service only runs its own.
 2. **Merge the environment variables.** Collect the variables of
    `automatic-submission`, `download-url` and `import-submission` from
    `docker-compose.yml` and any override files into the one `submission-pipeline`
