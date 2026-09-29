@@ -33,6 +33,7 @@
     "n3": "^1.16.2",
     "simple-oauth2": "^5.1.0",
     "sparqljson-parse": "^2.1.1",
+    "undici": "^6.29.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

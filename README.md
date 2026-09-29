@@ -103,7 +103,7 @@ Removed without replacement:
 ### How to download from servers with an incomplete certificate chain
 
 `download-url-service` bundled extra intermediate certificates for a few misconfigured
-servers. This service uses Node's `fetch`, which ignores that mechanism. Mount a PEM
+servers. This service uses `fetch`, which ignores that mechanism. Mount a PEM
 bundle with the missing certificates and point `NODE_EXTRA_CA_CERTS` to it:
 
 ```yaml
@@ -175,6 +175,11 @@ the submission is registered:
 
 Responds with `409 Conflict` if the `submittedResource` already exists.
 
+A remote `@context` is only fetched from a public address, and responds with `400 Bad
+Request` otherwise. The published context,
+`https://lblod.data.gift/contexts/automatische-melding/v1/context.json`, is served from
+memory.
+
 #### POST /status
 
 Returns the status of a submission's job as JSON-LD. Limited to 5 requests per minute
@@ -200,6 +205,11 @@ in the organisation's submission graph. The service leaves the job at `js:busy`;
 Downloads retry with exponential backoff, as in `download-url-service`: with the
 default `CACHING_MAX_RETRIES` a failing download is given up after about 4.4 days. A
 download waiting for its next attempt doesn't take up a `DOWNLOAD_CONCURRENCY` slot.
+
+Only public http(s) addresses are downloaded from, checked again at every redirect. A
+URL that resolves to a private, loopback or link-local address, such as another
+service in the stack, fails at once without retries. A redirect to another origin
+drops the `Authorization` header.
 
 ### Submission states
 
